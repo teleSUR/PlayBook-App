@@ -1,0 +1,67 @@
+Ambiente de desarrollo:
+------------
+- Flash Builder 4.6 ( http://www.adobe.com/products/flash-builder.html )
+- BlackBerry® Tablet OS SDK for Adobe® AIR® ( http://us.blackberry.com/developers/tablet/adobe-downloads.jsp )
+( Funciona tanto con el SDK Versión 1.1.1 como con el Versión 2.0, pero esta compilado con el SDK Versión 1.1.1
+porque el 2.0 aún es Beta y el 1.1.1 es más pequeño y debe ir embebido en el código)
+
+Instrucciones y descargas oficiales de RIM:
+- http://us.blackberry.com/developers/tablet/adobe-downloads.jsp
+
+Compilación
+------------
+Para compilar el proyecto hay que mandar parámetros extra que son:
+
+-locale=es_ES
+Define los lenguajes con los que se compilará. Actualmente sólo soporta español, pero en esa linea se agregarían (separado por comas) los demás lenguajes.
+
+-define=CONFIG::playbook_deploy,true
+Define si la compilación se esta haciendo para el Simulador/PlayBook o para el escritorio.
+Con playbook_deploy = false la aplicación correrá en escritorio, pero el reproductor no tiene controles 
+y el menú se saca con click central del mouse. Se utiliza para pruebas rápidas en escritorio.
+Si se corre esta versión en el  simulador o en la PlayBook no se podrá sacar el menú porque la PlayBook 
+no tiene un gesto que signifique "Click Central"
+
+Con playbook_deploy = true la aplicación correrá para la Playbook física o el Simulador con todas las caracteristicas.
+Esta versión no se puede ejecutar en escritorio porque truena al arranque por la falta del sistema PPS de la PlayBook
+
+-define=DEBUG::boxes,false
+Si se activa esta opción, el controno de las cajas de contenido se marcará con colores.
+
+-define=DEBUG::locale,true
+Si se activa esta opción se enviarán a la consola mensajes de error en caso de problemas de localización
+(Cadenas que no estan localizadas, imágenes inexistentes)
+
+-define=DEBUG::telesur_api,false
+Si se activa esta opción, se mandará a la consola información sobre las peticiones realizadas al API de teleSUR
+
+-define=DEBUG::configuration,false
+Si se activa esta opción se enviarán a la consola mensajes de error en caso de problemas de configuración
+(Configuraciones no existentes, etc)
+
+-define=DEBUG::time,false
+Esta opción activa la información en consola de tareas de manejo de tiempo (formateo de fechas, adquisicion de la hora remota, etc)
+
+-define=DEBUG::root,false
+Esta opción activa la información en consola de tareas del programa principal.
+
+-define=DEBUG::menu,false
+Esta opción activa la información en consola de tareas del menú.
+
+-define=DEBUG::filter,false
+Esta opción activa la información en consola de tareas de las tiras de filtros.
+
+-define=DEBUG::clipgrid,false
+Esta opción activa la información en consola de tareas de la cuadrícula de videos.
+
+-define=DEBUG::navigation,false
+Esta opción activa la información en consola de tareas de la navegación.
+
+-define=DEBUG::infopanel,false
+Esta opción activa la información en consola de tareas del panel de información del clip.
+
+-define=DEBUG::corresponsales,false
+Esta opción activa la información en consola de tareas del mapa de corresponsales.
+
+-define=DEBUG::player,false
+Esta opción activa la información en consola de tareas del reproductor de clips.
