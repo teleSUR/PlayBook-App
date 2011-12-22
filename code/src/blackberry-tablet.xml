@@ -36,7 +36,7 @@
    <!--  Fourth digit segment of the package version. First three segments are taken from app 
    		 description versionNumber tag. Must be an integer from 0 to 2^16-1 -->
 	
-	<buildId>1</buildId>
+	<buildId>0</buildId>
 	<platformVersion>1.0.8.0</platformVersion>
 
 	<permission>access_internet</permission>

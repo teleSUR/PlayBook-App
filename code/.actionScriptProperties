@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <actionScriptProperties analytics="false" mainApplicationPath="TeleSUR.as" projectUUID="20fd8eb9-110a-41a8-8caf-a3ed3e63e9c3" version="10">
-  <compiler additionalCompilerArguments="-locale=es_ES&#13;&#10;-define=CONFIG::playbook_deploy,true&#13;&#10;-define=DEBUG::boxes,false&#13;&#10;-define=DEBUG::locale,true&#13;&#10;-define=DEBUG::telesur_api,false&#13;&#10;-define=DEBUG::configuration,false&#13;&#10;-define=DEBUG::time,false&#13;&#10;-define=DEBUG::root,false&#13;&#10;-define=DEBUG::menu,false&#13;&#10;-define=DEBUG::filter,false&#13;&#10;-define=DEBUG::clipgrid,false&#13;&#10;-define=DEBUG::navigation,false&#13;&#10;-define=DEBUG::infopanel,false&#13;&#10;-define=DEBUG::corresponsales,false&#13;&#10;-define=DEBUG::player,false" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="true" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+  <compiler additionalCompilerArguments="-locale=es_ES&#13;&#10;-define=CONFIG::playbook_deploy,true&#13;&#10;-define=DEBUG::boxes,false&#13;&#10;-define=DEBUG::locale,false&#13;&#10;-define=DEBUG::telesur_api,false&#13;&#10;-define=DEBUG::configuration,false&#13;&#10;-define=DEBUG::time,false&#13;&#10;-define=DEBUG::root,false&#13;&#10;-define=DEBUG::menu,false&#13;&#10;-define=DEBUG::filter,false&#13;&#10;-define=DEBUG::clipgrid,false&#13;&#10;-define=DEBUG::navigation,false&#13;&#10;-define=DEBUG::infopanel,false&#13;&#10;-define=DEBUG::corresponsales,false&#13;&#10;-define=DEBUG::player,false" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="false" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="true" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
     <compilerSourcePath>
       <compilerSourcePathEntry kind="1" linkType="1" path="locale/{locale}"/>
     </compilerSourcePath>
@@ -23,9 +23,9 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/spark_dmv.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_dmv.swc" useDefaultLinkType="false"/>
-          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_flashflexkit.swc" useDefaultLinkType="false"/>
-          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/applicationupdater_ui.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/airframework.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/applicationupdater_ui.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_flashflexkit.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
@@ -46,6 +46,7 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="com.qnx.flexide.multiplatform.qnx.platform" extraPackagingOptions="" signBarFile="false">
+      <multiPlatformSettings enabled="true" includePlatformLibs="false" platformID="com.qnx.flexide.multiplatform.qnx.platform" version="2"/>
       <airSettings airCertificatePath="" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes>
           <pathEntry path="assets/Original Images"/>
@@ -53,7 +54,6 @@
         </airExcludes>
         <anePaths/>
       </airSettings>
-      <multiPlatformSettings enabled="true" includePlatformLibs="false" platformID="com.qnx.flexide.multiplatform.qnx.platform" version="2"/>
       <actionScriptSettings version="1"/>
     </buildTarget>
     <buildTarget buildTargetName="default">
