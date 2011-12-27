@@ -79,7 +79,7 @@ package telesur.components.nav.infopanel
 		}
 		
 		public function setData(data:Object, detalle:Number=0):void {
-			if ( detalle == DetalleClip.BASICO || detalle == DetalleClip.COMPLETO ) {
+			if ( detalle <= DetalleClip.COMPLETO ) {
 				this._data = data;
 				
 				this.thumbnailDescritionPanel.limpiar();
@@ -91,13 +91,13 @@ package telesur.components.nav.infopanel
 				this.etiquetasPanel.etiquetas = [];
 				this.videosRelacionadosPanel.setClipData([]);
 				
-				if ( detalle == DetalleClip.BASICO ) {
+				if ( detalle != DetalleClip.COMPLETO ) {
 					this._api.cancelarActual();
 					this._api.cargarInformacionVideo(this.data.slug, {detalle: "completo"},this._onCargarDetalleCompletoResult,this._onCargarDetalleCompletoFault);
 				}
 			}
 				
-			if ( detalle == DetalleClip.COMPLETO || detalle== DetalleClip.EXTENDIDO ) {
+			if ( detalle == DetalleClip.COMPLETO ) {
 				DEBUG::infopanel {
 					trace("ClipInfoPanel> Ciudad:", this.data.ciudad, " / Pais:", this.data.pais);
 				}
@@ -110,6 +110,17 @@ package telesur.components.nav.infopanel
 					trace("ClipInfoPanel> Tags:", this.data.tags );
 				}
 				
+				// TODO: 
+				//    Los tags son más bien meta-información, preferible antes mostrar Corresponal (si hay) y Tema (si hay)
+				//        Ejemplo:
+				//            if (this.data.corresponsal) this.etiquetasPanel.etiquetas += "Correpsonsal: " + this.data.corresponsal.nombre;
+				//            if (this.data.tema) this.etiquetasPanel.etiquetas += "Tema: " + this.data.tema.nombre;
+				//    Si se trata de una entrevista, sería mucho mejor poner entrevistado y entrevistador:
+				//        Ejemplo:
+				//            if (this.data.tipo.slug == "entrevista") {
+				//                if (this.data.entrevistado) this.etiquetasPanel.etiquetas += "Entrevistado: " + this.data.entrevistado.nombre;
+				//                if (this.data.entrevistador) this.etiquetasPanel.etiquetas += "Entrevistador: " + this.data.entrevistador.nombre;
+				//            }
 				if ( this.data.tags ) {
 					this.etiquetasPanel.etiquetas = (this.data.tags as String).split(", ");
 				} else {
@@ -127,7 +138,7 @@ package telesur.components.nav.infopanel
 		}
 		
 		private function _onCargarDetalleCompletoResult(event:ResultEvent):void {
-			this.setData(event.result, DetalleClip.EXTENDIDO);
+			this.setData(event.result, DetalleClip.COMPLETO);
 		}
 		
 		private function _onCargarDetalleCompletoFault(event:FaultEvent):void {
