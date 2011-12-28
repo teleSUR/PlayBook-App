@@ -1,6 +1,6 @@
 package telesur.components.nav.infopanel
 {
-	import flash.display.GradientType;
+    import flash.display.GradientType;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	
@@ -110,23 +110,40 @@ package telesur.components.nav.infopanel
 					trace("ClipInfoPanel> Tags:", this.data.tags );
 				}
 				
-				// TODO: 
-				//    Los tags son más bien meta-información, preferible antes mostrar Corresponal (si hay) y Tema (si hay)
-				//        Ejemplo:
-				//            if (this.data.corresponsal) this.etiquetasPanel.etiquetas += "Correpsonsal: " + this.data.corresponsal.nombre;
-				//            if (this.data.tema) this.etiquetasPanel.etiquetas += "Tema: " + this.data.tema.nombre;
-				//    Si se trata de una entrevista, sería mucho mejor poner entrevistado y entrevistador:
-				//        Ejemplo:
-				//            if (this.data.tipo.slug == "entrevista") {
-				//                if (this.data.entrevistado) this.etiquetasPanel.etiquetas += "Entrevistado: " + this.data.entrevistado.nombre;
-				//                if (this.data.entrevistador) this.etiquetasPanel.etiquetas += "Entrevistador: " + this.data.entrevistador.nombre;
-				//            }
-				if ( this.data.tags ) {
-					this.etiquetasPanel.etiquetas = (this.data.tags as String).split(", ");
-				} else {
-					//TODO: Temporal hasta cambiar por Botones
-					this.etiquetasPanel.etiquetas = [ ManejadorRecursos.localizarCadena("SinEtiquetas") ];
+				///////////////////////////////////////////////////////////
+				// Detemrinar información a mostrar en el panel central //
+				///////////////////////////////////////////////////////////
+				var detalles_clip:Array = [];
+				
+				// detalles específicos por tipo de clip
+				switch ( (this.data.tipo.slug as String) ) {
+					case "programa":
+						if ( this.data.programa ) detalles_clip.push(this.data.programa.descripcion as String);
+						break;
+					
+					case "entrevista":
+						if ( this.data.entrevistado ) detalles_clip.push("Entrevistado: " + (this.data.entrevistado.nombre as String));
+						if ( this.data.entrevistador ) detalles_clip.push("Entrevistador: " + (this.data.entrevistador.nombre as String));
 				}
+				
+				// detalles para cualquier tipo	de clip
+		        if ( this.data.corresponsal ) detalles_clip.push("Corresponsal: " + (this.data.corresponsal.nombre as String));
+				if ( this.data.tema ) detalles_clip.push("Tema: " + (this.data.tema.nombre as String));
+
+				// usar tags sólo si no hay nada más que mostrar
+				if ( detalles_clip.length == 0 ) {
+				    if (this.data.tags ) {
+						// TODO: o mejor incluso omitir los tags y buscar algo más, los siento muy pesados
+						detalles_clip = (this.data.tags as String).split(", ");
+    			    } else {
+    				    //TODO: Temporal hasta cambiar por Botones
+						detalles_clip = [ ManejadorRecursos.localizarCadena("SinEtiquetas") ];
+    			    }				    
+			    }
+				
+				// mostrar los detalles
+				this.etiquetasPanel.etiquetas = detalles_clip;
+				///////////////////////////////////////////////////////////
 				
 				this._api.cargarVideos({relacionados: this.data.slug, detalle: "basico", ultimo: this.NUMCLIPSRELACIONADOS},this._onCargarRelacionadosResult,this._onCargarRelacionadosFault);
 			}
