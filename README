@@ -10,6 +10,8 @@ Instrucciones y descargas oficiales de RIM:
 
 Compilación
 ------------
+Asegurarse de seleccionar "Add platform specific libraries to library path" dentro de Flex Build Packaging > BlackBerry Tablet OS en las propiedades del proyecto de Flash Builder
+
 Para compilar el proyecto hay que mandar parámetros extra que son:
 
 -locale=es_ES
