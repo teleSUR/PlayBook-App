@@ -70,8 +70,8 @@ package telesur.components.menu
 			this.addButton(MenuAction.VISTA, {NuevaVista: Vista.DOCUMENTALES}, ManejadorRecursos.imagen("DocumentalesIcono"), ManejadorRecursos.localizarCadena("Documentales"));
 			this.addChild(new Spacer(8,SizeUnit.PIXELS));
 			this.addButton(MenuAction.VISTA, {NuevaVista: Vista.CORRESPONSALES}, ManejadorRecursos.imagen("CorresponsalesIcono"), ManejadorRecursos.localizarCadena("Corresponsales"));
-			//this.addChild(new Spacer(8,SizeUnit.PIXELS));
-			//this.addButton(MenuAction.VISTA, {NuevaVista: Vista.BUSCAR}, ManejadorRecursos.imagen("BuscarIcono"),ManejadorRecursos.localizarCadena("Buscar"));
+			this.addChild(new Spacer(8,SizeUnit.PIXELS));
+			this.addButton(MenuAction.VISTA, {NuevaVista: Vista.BUSCAR}, ManejadorRecursos.imagen("BuscarIcono"),ManejadorRecursos.localizarCadena("Buscar"));
 			this.addChild(new Spacer());
 			this.addButton(MenuAction.ACERCADE, null, ManejadorRecursos.imagen("AcercaDeIcono"), ManejadorRecursos.localizarCadena("AcercaDe"));
 			this.addChild(new Spacer(8, SizeUnit.PIXELS));

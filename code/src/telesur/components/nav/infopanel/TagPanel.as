@@ -5,6 +5,8 @@ package telesur.components.nav.infopanel
 	import qnx.ui.core.SizeUnit;
 	import qnx.ui.text.Label;
 	
+	import telesur.utils.ManejadorGraficos;
+	
 	public class TagPanel extends Container
 	{
 		private var _etiquetas:Array;
@@ -41,10 +43,7 @@ package telesur.components.nav.infopanel
 				
 			this.graphics.clear();
 			
-			this.graphics.beginFill(0xFFFFFF,1);
-			this.graphics.lineStyle(2,0xDDDDDD);
-			this.graphics.drawRoundRect(0,0,this.width,this.height,24);
-			this.graphics.endFill();
+			ManejadorGraficos.AplicarFondoControl(this.graphics,0,0,this.width,this.height);
 		}
 	}
 }

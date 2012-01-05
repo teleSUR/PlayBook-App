@@ -1,6 +1,8 @@
 package telesur.utils
 {
 	import flash.display.Bitmap;
+	import flash.display.Graphics;
+	import flash.geom.Matrix;
 	
 	import mx.resources.IResourceManager;
 	import mx.resources.ResourceManager;

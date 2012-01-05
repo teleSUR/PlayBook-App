@@ -85,6 +85,11 @@ package telesur.components.nav.grid
 			this.addChild(this._tileList);
 		}
 		
+		public function limpiarClips():void {
+			this._numClipsCargados = 0;
+			this._tileList.dataProvider.removeAll();
+		}
+		
 		public function setQuery(options:Object):void {
 			this.clearQuery();
 			this.appendQuery(options);
@@ -109,8 +114,7 @@ package telesur.components.nav.grid
 				this._api.cancelarActual();
 			}
 			
-			this._numClipsCargados = 0;
-			this._tileList.dataProvider.removeAll();
+			this.limpiarClips();
 			this.cargarBloqueClips();
 		}
 		
