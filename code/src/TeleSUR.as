@@ -112,7 +112,7 @@ package
 			if ( CONFIG::playbook_deploy) {
 				QNXApplication.qnxApplication.addEventListener(QNXApplicationEvent.SWIPE_DOWN,this._onMenuDisplay);
 			} else {
-				this.addEventListener(MouseEvent.MIDDLE_CLICK, this._onMenuDisplay);
+				this.addEventListener(MouseEvent.RIGHT_CLICK, this._onMenuDisplay);
 			}
 			
 			this._menuOverlay.addEventListener(MouseEvent.CLICK,this._onOverlayClick);
