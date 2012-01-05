@@ -10,10 +10,15 @@ package telesur.components.nav
 	import qnx.ui.core.ContainerAlign;
 	import qnx.ui.core.ContainerFlow;
 	import qnx.ui.core.Containment;
+	import qnx.ui.core.SizeUnit;
 	import qnx.ui.display.TilingBackground;
 	
 	import telesur.components.Overlay;
 	import telesur.components.about.AboutPanel;
+	import telesur.components.nav.busqueda.BusquedaEvent;
+	import telesur.components.nav.busqueda.BusquedaPanel;
+	import telesur.components.nav.busqueda.BusquedaStrip;
+	import telesur.components.nav.busqueda.BusquedaStripEvent;
 	import telesur.components.nav.filters.CategoriasFilterStrip;
 	import telesur.components.nav.filters.FilterStrip;
 	import telesur.components.nav.filters.FilterStripEvent;
@@ -27,6 +32,7 @@ package telesur.components.nav
 	import telesur.components.nav.titlebar.TitleBar;
 	import telesur.components.nav.titlebar.TitleBarEvent;
 	import telesur.data.TelesurAPI;
+	import telesur.enums.ConcurrentRequestStrategy;
 	import telesur.enums.DetalleClip;
 	import telesur.enums.Vista;
 	import telesur.events.ClipEvent;
@@ -40,13 +46,14 @@ package telesur.components.nav
 		private var _titleBar:TitleBar;
 		private var _clipGrid:ClipGrid;
 		private var _corresponsalesMap:CorresponsalesMap;
-		//private var _searchPanel:SearchPanel;
+		private var _searchPanel:BusquedaPanel;
 		
 		private var _panelOverlay:Overlay;
 		private var _clipInfoPanel:ClipInfoPanel;
 		
 		private var _categoriasStrip:CategoriasFilterStrip;
 		private var _programasStrip:ProgramasFilterStrip;
+		private var _busquedaStrip:BusquedaStrip;
 		
 		public function Navigation()
 		{
@@ -68,30 +75,43 @@ package telesur.components.nav
 			
 			this._titleBar = new TitleBar();
 			
-			this._clipGrid = new ClipGrid(new TelesurAPI());
+			this._clipGrid = new ClipGrid(new TelesurAPI(ConcurrentRequestStrategy.CANCELAR));
 			this._clipGrid.visible = false;
 			
 			this._corresponsalesMap = new CorresponsalesMap(new TelesurAPI());
 			this._corresponsalesMap.visible= false;
+			
+			var filteringAPI:TelesurAPI = new TelesurAPI(ConcurrentRequestStrategy.ENCOLAR);
+			
+			this._searchPanel = new BusquedaPanel(filteringAPI);
+			this._searchPanel.visible = false;
+			this._searchPanel.containment = Containment.UNCONTAINED;
 			
 			this._panelOverlay = new Overlay();
 			this._panelOverlay.containment = Containment.BACKGROUND;
 			this._panelOverlay.bitmapData = Bitmap(ManejadorRecursos.imagen("Overlay")).bitmapData;
 			this._panelOverlay.visible = false;
 			
-			this._clipInfoPanel = new ClipInfoPanel(new TelesurAPI());
+			this._clipInfoPanel = new ClipInfoPanel(new TelesurAPI(ConcurrentRequestStrategy.CANCELAR));
 			this._clipInfoPanel.visible = false;
 			this._clipInfoPanel.containment = Containment.UNCONTAINED;
 			
-			this._categoriasStrip = new CategoriasFilterStrip(new TelesurAPI());
+			this._categoriasStrip = new CategoriasFilterStrip(filteringAPI);
 			this._categoriasStrip.setSize(this.width,CategoriasFilterStrip.PREFERRED_HEIGHT);
 			this._categoriasStrip.containment = Containment.UNCONTAINED;
 			this._categoriasStrip.visible = false;
 			
-			this._programasStrip = new ProgramasFilterStrip(new TelesurAPI());
+			this._programasStrip = new ProgramasFilterStrip(filteringAPI);
 			this._programasStrip.setSize(this.width,ProgramasFilterStrip.PREFERRED_HEIGHT);
 			this._programasStrip.containment = Containment.UNCONTAINED;
 			this._programasStrip.visible = false;
+			
+			this._busquedaStrip = new BusquedaStrip();
+			this._busquedaStrip.setSize(this.width, BusquedaStrip.PREFERRED_HEIGHT);
+			this._busquedaStrip.size = BusquedaStrip.PREFERRED_HEIGHT;
+			this._busquedaStrip.sizeUnit = SizeUnit.PIXELS;
+			this._busquedaStrip.containment = Containment.UNCONTAINED;
+			this._busquedaStrip.visible = false;
 			
 			this.addChild(this._bg);
 			this.addChild(this._titleBar);
@@ -99,7 +119,9 @@ package telesur.components.nav
 			this.addChild(this._corresponsalesMap);
 			this.addChild(this._categoriasStrip);
 			this.addChild(this._programasStrip);
+			this.addChild(this._busquedaStrip);
 			this.addChild(this._panelOverlay);
+			this.addChild(this._searchPanel);
 			this.addChild(this._clipInfoPanel);			
 			
 			// Asignación de eventos
@@ -107,8 +129,11 @@ package telesur.components.nav
 			this._titleBar.addEventListener(TitleBarEvent.REFRESH,this._onTitleBarRefresh);
 			this._clipGrid.addEventListener(ClipGridEvent.CLIPSELECTED,this._onClipSelected);
 			this._corresponsalesMap.addEventListener(CorresponsalesMapEvent.CLIP_SELECTED, this._onCorresponsalesClipSelected);
+			this._searchPanel.addEventListener(BusquedaEvent.BUSCAR, this._onBuscarClips);
+			
 			this._categoriasStrip.addEventListener(FilterStripEvent.SELECT,this._onCategoriaSelect);
 			this._programasStrip.addEventListener(FilterStripEvent.SELECT,this._onProgramaSelect);
+			this._busquedaStrip.addEventListener(BusquedaStripEvent.BUSQUEDA_NUEVA, this._onBusquedaNueva);
 			this._clipInfoPanel.addEventListener(ClipInfoPanelEvent.PLAY_CLIP, this._onClipPlay);
 			this._clipInfoPanel.addEventListener(ClipInfoPanelEvent.CLOSE, this._onClipInfoPanelClose);
 			
@@ -128,9 +153,11 @@ package telesur.components.nav
 			var mostrarProgramas:Boolean = false;
 			var mostrarClipGrid:Boolean = true;
 			var mostrarCorresponsalesMap:Boolean = false;
+			var mostrarBusqueda:Boolean = false;
 			
 			this._panelOverlay.visible = false;
 			this._clipInfoPanel.visible = false;
+			this._searchPanel.visible = false;
 			
 			switch (nuevaVista){
 				/*case Vista.ENVIVO:
@@ -184,6 +211,13 @@ package telesur.components.nav
 					
 					this._corresponsalesMap.actualizarContenido();
 					break;
+				
+				case Vista.BUSCAR:
+					this._titleBar.title = ManejadorRecursos.localizarCadena("Buscar");
+					
+					mostrarClipGrid = true;
+					mostrarBusqueda = true;
+					break;
 			}
 			
 			this._vistaActual = nuevaVista;
@@ -191,11 +225,23 @@ package telesur.components.nav
 			this._clipInfoPanel.visible = false;			
 			this._clipGrid.visible = mostrarClipGrid;
 			this._corresponsalesMap.visible = mostrarCorresponsalesMap;
+
+			this._panelOverlay.visible = mostrarBusqueda;
+			this._searchPanel.visible = mostrarBusqueda;
 			
 			this._estadoStrip(this._categoriasStrip,mostrarCategorias);
 			this._estadoStrip(this._programasStrip,mostrarProgramas);
 			
-			if ( mostrarClipGrid && ! mostrarCategorias && ! mostrarProgramas ) {
+			if ( mostrarBusqueda ) {
+				this._clipGrid.limpiarClips();
+				this._busquedaStrip.containment = Containment.CONTAINED;
+				this._busquedaStrip.visible = true;
+			} else {
+				this._busquedaStrip.containment = Containment.UNCONTAINED;
+				this._busquedaStrip.visible = false;
+			}
+			
+			if ( mostrarClipGrid && ! mostrarCategorias && ! mostrarProgramas && ! mostrarBusqueda ) {
 				this._clipGrid.recargarClips();
 			}
 			
@@ -217,6 +263,11 @@ package telesur.components.nav
 				case Vista.ENTREVISTAS:
 					this._categoriasStrip.layout();
 					this._clipGrid.layout();
+					break;
+				case Vista.BUSCAR:
+					this._busquedaStrip.layout();
+					this._clipGrid.layout();
+					break;
 			}
 			
 			super.layout();
@@ -298,15 +349,37 @@ package telesur.components.nav
 			this._clipGrid.recargarClips();
 		}
 		
+		private function _onBusquedaNueva(event:BusquedaStripEvent):void {
+			this._searchPanel.visible = true;
+			this._panelOverlay.visible = true;
+		}
+		
+		private function _onBuscarClips(event:BusquedaEvent):void {
+			this._clipGrid.visible = true;
+			this._panelOverlay.visible = false;
+			this._searchPanel.visible = false;
+			
+			this._clipGrid.setQuery(event.searchOptions);
+			this._clipGrid.recargarClips();
+			
+			this._busquedaStrip.cadenaBusqueda = event.textOptions.join(", ");
+			
+			this.layout();
+		}
+		
 		override protected function draw():void {
 			this._titleBar.width = this.width;
 			this._clipGrid.width = this.width;
 			this._corresponsalesMap.width = this.width;
 			this._categoriasStrip.width = this.width;
 			this._programasStrip.width = this.width;
+			this._busquedaStrip.width = this.width;
 			
 			this._clipInfoPanel.setPosition(32,32);
 			this._clipInfoPanel.setSize(this.width - 32*2,this.height - 32*2);
+			
+			this._searchPanel.setPosition(this.width / 8, 16);
+			this._searchPanel.setSize(6 * this.width / 8, this.height - 32);
 			
 			this.layout();
 

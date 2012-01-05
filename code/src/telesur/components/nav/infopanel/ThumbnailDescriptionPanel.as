@@ -13,6 +13,7 @@ package telesur.components.nav.infopanel
 	import qnx.ui.text.Label;
 	
 	import telesur.components.nav.grid.ClipCellRenderer;
+	import telesur.utils.ManejadorGraficos;
 	import telesur.utils.ManejadorRecursos;
 	
 	internal class ThumbnailDescriptionPanel extends Container
@@ -145,10 +146,7 @@ package telesur.components.nav.infopanel
 			
 			this.graphics.clear();
 
-			this.graphics.beginFill(0xFFFFFF,1);
-			this.graphics.lineStyle(2,0xDDDDDD);
-			this.graphics.drawRoundRect(0,0,this.width,this.height,24);
-			this.graphics.endFill();
+			ManejadorGraficos.AplicarFondoControl(this.graphics,0,0,this.width,this.height);
 		}
 	}
 }

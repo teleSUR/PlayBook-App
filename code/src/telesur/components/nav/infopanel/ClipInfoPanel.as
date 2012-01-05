@@ -16,6 +16,7 @@ package telesur.components.nav.infopanel
 	
 	import telesur.data.TelesurAPI;
 	import telesur.enums.DetalleClip;
+	import telesur.utils.ManejadorGraficos;
 	import telesur.utils.ManejadorRecursos;
 	import telesur.utils.ManejadorTiempo;
 	
@@ -173,14 +174,8 @@ package telesur.components.nav.infopanel
 		override protected function draw():void {
 			this.layout();
 			
-			var matrix:Matrix = new Matrix();
-			matrix.createGradientBox(this.width, this.height, (Math.PI/180)*90, 0, 0);
-			
 			this.graphics.clear();
-			
-			this.graphics.beginGradientFill(GradientType.LINEAR,[0xEEEEEE,0xFDFDFD],[1,1],[127,255],matrix);		
-			this.graphics.drawRoundRect(0,0,this.width,this.height,24);
-			this.graphics.endFill();
+			ManejadorGraficos.AplicarFondoPanel(this.graphics, 0, 0, this.width, this.height);
 			
 			this.thumbnailDescritionPanel.drawNow();
 		}
