@@ -20,9 +20,9 @@ Define los lenguajes con los que se compilará. Actualmente sólo soporta español,
 -define=CONFIG::playbook_deploy,true
 Define si la compilación se esta haciendo para el Simulador/PlayBook o para el escritorio.
 Con playbook_deploy = false la aplicación correrá en escritorio, pero el reproductor no tiene controles 
-y el menú se saca con click central del mouse. Se utiliza para pruebas rápidas en escritorio.
+y el menú se saca con click derecho del mouse. Se utiliza para pruebas rápidas en escritorio.
 Si se corre esta versión en el  simulador o en la PlayBook no se podrá sacar el menú porque la PlayBook 
-no tiene un gesto que signifique "Click Central"
+no tiene un gesto que signifique "Click derecho"
 
 Con playbook_deploy = true la aplicación correrá para la Playbook física o el Simulador con todas las caracteristicas.
 Esta versión no se puede ejecutar en escritorio porque truena al arranque por la falta del sistema PPS de la PlayBook
